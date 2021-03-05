@@ -7,14 +7,14 @@ import EditableRow from "./EditableRow"
       super(props);
       this.columns = [
         {
-          title: 'name',
-          dataIndex: 'name',
+          title: 'category',
+          dataIndex: 'category',
           width: '30%',
           editable: true,
         },
   
         {
-          title: 'operation',
+          title: '',
           dataIndex: 'operation',
           render: (_, record) =>
             this.state.dataSource.length >= 1 ? (
@@ -25,7 +25,7 @@ import EditableRow from "./EditableRow"
         },
 
         {
-            title: 'create subcategory',
+            title: '',
             dataIndex: 'create subcategory',
             render: (_, record) =>
               this.state.dataSource.length >= 1 ? (
@@ -37,15 +37,76 @@ import EditableRow from "./EditableRow"
       ];
       this.state = {
         dataSource: [
-          {
-            key: '0',
-            name: 'Edward King 0',
-
-          },
-          {
-            key: '1',
-            name: 'Edward King 1',
-          },
+            {
+                key: 1,
+                category: "SHOES",
+                children: [
+                  {
+                    key: 11,
+                    category: "RUNNING SHOES",
+                  },
+                  {
+                    key: 12,
+                    category: "WALKING SHOES",
+                    children: [
+                      {
+                        key: 121,
+                        category: "ASICS",
+                      },
+                      {
+                        key: 122,
+                        category: "SKETCHERS",
+                      },
+                    ],
+                  },
+                  {
+                    key: 13,
+                    category: "CASUAL SHOES",
+                    children: [
+                      {
+                        key: 131,
+                        category: "NIKE",
+                        children: [
+                          {
+                            key: 1311,
+                            category: "AIR",
+                          },
+                          {
+                            key: 1312,
+                            category: "ZOOM",
+                          },
+                          {
+                            key: 1313,
+                            category: "FLYWIRE",
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                ],
+              },
+              {
+                key: 2,
+                category: "Book",
+              },
+              {
+                key: 3,
+                category: "laptop",
+                children: [
+                  {
+                    key: 31,
+                    category: "apple",
+                  },
+                  {
+                    key: 32,
+                    category: "HP",
+                  },
+                  {
+                    key: 33,
+                    category: "DELL",
+                  },
+                ],
+              },
         ],
         count: 2,
       };
@@ -61,7 +122,7 @@ import EditableRow from "./EditableRow"
       const { count, dataSource } = this.state;
       const newData = {
         key: count,
-        name: `Edward King ${count}`,
+        category: `Edward King ${count}`,
         age: '32',
         address: `London, Park Lane no. ${count}`,
       };
@@ -79,6 +140,8 @@ import EditableRow from "./EditableRow"
         dataSource: newData,
       });
     };
+  
+      
   
     render() {
       const { dataSource } = this.state;
@@ -104,6 +167,21 @@ import EditableRow from "./EditableRow"
           }),
         };
       });
+      const rowSelection = {
+        onChange: (selectedRowKeys, selectedRows) => {
+          console.log(
+            `selectedRowKeys: ${selectedRowKeys}`,
+            "selectedRows: ",
+            selectedRows
+          );
+        },
+        onSelect: (record, selected, selectedRows) => {
+          console.log(record, selected, selectedRows);
+        },
+        onSelectAll: (selected, selectedRows, changeRows) => {
+          console.log(selected, selectedRows, changeRows);
+        },
+      };
       return (
         <div>
           <Button
@@ -120,10 +198,11 @@ import EditableRow from "./EditableRow"
           </Button>
           <Table
             components={components}
-            rowClassName={() => 'editable-row'}
+            rowClasscategory={() => 'editable-row'}
             bordered
             dataSource={dataSource}
             columns={columns}
+            rowSelection={{ ...rowSelection }}
           />
         </div>
       );
